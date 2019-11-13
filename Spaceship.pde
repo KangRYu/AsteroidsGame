@@ -11,4 +11,13 @@ class Spaceship extends Floater {
         myDirectionY = 0;
         myPointDirection = 180;
     }
+    public void turnTo(float argRotation) {
+        myPointDirection = argRotation;
+    }
+    public double getX() {
+        return myCenterX;
+    }
+    public double getY() {
+        return myCenterY;
+    }
 }

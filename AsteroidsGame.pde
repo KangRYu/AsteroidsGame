@@ -1,11 +1,9 @@
 Spaceship player;
 
 void keyPressed() {
-  if(keyCode == LEFT) {
-    player.turn(1);
-  }
-  if(keyCode == RIGHT) {
-    player.turn(-1);
+  if(key == 'w') {
+    System.out.println(true);
+    player.accelerate(0.5);
   }
 }
 public void setup() {
@@ -14,7 +12,15 @@ public void setup() {
 }
 public void draw() {
   background(200);
+  // Makes player angle equal to the angle to the mouse
+  player.turnTo(getMouseAngle() - 90);
+  // Updates player
   player.show();
   player.move();
+}
+public float getMouseAngle() { // Returns the angle of the mouse relative to the player in degrees
+  double x = mouseX - player.getX();
+  double y = mouseY - player.getY();
+  return (float)(Math.toDegrees(Math.atan2(y, x)));
 }
 
