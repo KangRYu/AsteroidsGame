@@ -5,23 +5,62 @@ ArrayList<Particle> particleList = new ArrayList<Particle>();
 int backgroundColor;
 boolean hyperSpacing = false;
 // Properties
-int numOfStars = 50;
+int numOfStars = 100;
 
 void keyPressed() {
   if(key == 'w') {
     player.accelerate(0.5);
-    for(int i = 0; i < 5; i++) {
+    // Spawn particles
+    for(int i = 0; i < 3; i++) { // Orange particles
+      Particle obj = new Particle();
+      obj.setX((float)player.getX());
+      obj.setY((float)player.getY());
+      obj.setColor(color(255, 133, 25));
+      obj.setVelocity((float)(10 * Math.random()));
+      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
+      particleList.add(obj);
+    }
+    for(int i = 0; i < 3; i++) { // Yellow particles
+      Particle obj = new Particle();
+      obj.setX((float)player.getX());
+      obj.setY((float)player.getY());
+      obj.setColor(color(255, 238, 107));
+      obj.setVelocity((float)(10 * Math.random()));
+      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
+      particleList.add(obj);
+    }
+    for(int i = 0; i < 3; i++) { // Red particles
+      Particle obj = new Particle();
+      obj.setX((float)player.getX());
+      obj.setY((float)player.getY());
+      obj.setColor(color(255, 75, 51));
+      obj.setVelocity((float)(10 * Math.random()));
+      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
+      particleList.add(obj);
+    }
+  }
+  if(key == 'h') {
+    // Spawn particles at original position
+    for(int i = 0; i < 50; i++) {
       Particle obj = new Particle();
       obj.setX((float)player.getX());
       obj.setY((float)player.getY());
       obj.setVelocity((float)(10 * Math.random()));
-      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180));
+      obj.setVelocityAngle((float)(Math.toRadians(Math.random() * 360)));
+      particleList.add(obj);
     }
-  }
-  if(key == 'h') {
     player.hyperSpace();
     backgroundColor = color(255);
     hyperSpacing = true;
+    // Spawn particles
+    for(int i = 0; i < 50; i++) {
+      Particle obj = new Particle();
+      obj.setX((float)player.getX());
+      obj.setY((float)player.getY());
+      obj.setVelocity((float)(10 * Math.random()));
+      obj.setVelocityAngle((float)(Math.toRadians(Math.random() * 360)));
+      particleList.add(obj);
+    }
   }
 }
 public void setup() {
@@ -47,6 +86,19 @@ public void draw() {
   for(Star stars : starList) {
     stars.show();
   }
+  // Draws all particles
+  for(Particle particles : particleList) {
+    particles.move();
+    particles.show();
+  }
+  // Remove non moving particles
+  ArrayList<Particle> keepedParticles = new ArrayList<Particle>();
+  for(Particle particles : particleList) {
+    if(!(particles.getVelocity() < 1)) {
+      keepedParticles.add(particles);
+    }
+  }
+  particleList = keepedParticles;
   // Makes player angle equal to the angle to the mouse
   player.turnTo(getMouseAngle());
   // Updates player

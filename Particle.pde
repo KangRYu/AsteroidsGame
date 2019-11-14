@@ -15,11 +15,8 @@ class Particle {
         velocity *= 0.95;
     }
     public void show() {
-        translate(x, y);
-        rotate(rotation);
-        rect(0, 0, size, size);
-        rotate(-rotation);
-        translate(-x, -y);
+        fill(myColor);
+        ellipse(x, y, size, size);
     }
     public float getX() {
         return x;
@@ -32,6 +29,9 @@ class Particle {
     }
     public void setY(float argY) {
         y = argY;
+    }
+    public float getVelocity() {
+        return velocity;
     }
     public void setVelocity(float argVelocity) {
         velocity = argVelocity;
