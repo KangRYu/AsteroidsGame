@@ -1,6 +1,7 @@
 // States
 Spaceship player;
 ArrayList<Star> starList = new ArrayList<Star>();
+ArrayList<Particle> particleList = new ArrayList<Particle>();
 int backgroundColor;
 boolean hyperSpacing = false;
 // Properties
@@ -9,6 +10,13 @@ int numOfStars = 50;
 void keyPressed() {
   if(key == 'w') {
     player.accelerate(0.5);
+    for(int i = 0; i < 5; i++) {
+      Particle obj = new Particle();
+      obj.setX((float)player.getX());
+      obj.setY((float)player.getY());
+      obj.setVelocity((float)(10 * Math.random()));
+      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180));
+    }
   }
   if(key == 'h') {
     player.hyperSpace();
@@ -19,6 +27,7 @@ void keyPressed() {
 public void setup() {
   // Style settings
   size(500, 500);
+  rectMode(CENTER);
   // Initializes values
   player = new Spaceship();
   backgroundColor = color(30);
