@@ -19,7 +19,7 @@ void keyPressed() {
       obj.setX((float)player.getX());
       obj.setY((float)player.getY());
       obj.setVelocity((float)(10 * Math.random()));
-      obj.setVelocityAngle((float)(Math.toRadians(Math.random() * 360)));
+      obj.setVelocityAngle((float)(radians(Math.random() * 360)));
       particleList.add(obj);
     }
     player.hyperSpace();
@@ -31,7 +31,7 @@ void keyPressed() {
       obj.setX((float)player.getX());
       obj.setY((float)player.getY());
       obj.setVelocity((float)(10 * Math.random()));
-      obj.setVelocityAngle((float)(Math.toRadians(Math.random() * 360)));
+      obj.setVelocityAngle((float)(radians(Math.random() * 360)));
       particleList.add(obj);
     }
   }
@@ -63,7 +63,7 @@ public void draw() {
       obj.setY((float)player.getY());
       obj.setColor(color(255, 133, 25));
       obj.setVelocity((float)(10 * Math.random()));
-      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
+      obj.setVelocityAngle((float)radians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
       particleList.add(obj);
     }
     for(int i = 0; i < 3; i++) { // Yellow particles
@@ -72,7 +72,7 @@ public void draw() {
       obj.setY((float)player.getY());
       obj.setColor(color(255, 238, 107));
       obj.setVelocity((float)(10 * Math.random()));
-      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
+      obj.setVelocityAngle((float)radians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
       particleList.add(obj);
     }
     for(int i = 0; i < 3; i++) { // Red particles
@@ -81,7 +81,7 @@ public void draw() {
       obj.setY((float)player.getY());
       obj.setColor(color(255, 75, 51));
       obj.setVelocity((float)(10 * Math.random()));
-      obj.setVelocityAngle((float)Math.toRadians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
+      obj.setVelocityAngle((float)radians(getMouseAngle() - 180 + (20 * Math.random() - 10)));
       particleList.add(obj);
     }
   }
