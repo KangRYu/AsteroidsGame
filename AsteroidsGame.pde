@@ -117,7 +117,7 @@ public void draw() {
 public float getMouseAngle() { // Returns the angle of the mouse relative to the player in degrees
   double x = mouseX - player.getX();
   double y = mouseY - player.getY();
-  return (float)(Math.toDegrees(Math.atan2(y, x)));
+  return (float)(degrees(Math.atan2(y, x)));
 }
 public void fadeInBackground() { // Fades in the background
   backgroundColor = lerpColor(backgroundColor, color(30), 0.05);
