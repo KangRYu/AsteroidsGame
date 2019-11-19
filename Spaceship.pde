@@ -1,5 +1,6 @@
 class Spaceship extends Floater {
     private boolean forward, backward, left, right; // The direction of acceleration
+    private float acceleration; // Magnitude of acceleration
     private boolean hyperspacing;
     public Spaceship() {
         // Initalizes all the corners
@@ -16,48 +17,43 @@ class Spaceship extends Floater {
         forward = backward = left = right = false;
         // Set hyperspacing
         hyperspacing = false;
+        // Set acceleration
+        acceleration = 0.15;
+    }
+    public void accelerate(float amount, float angleOffset) { // Modified acceleration for custom angles
+        float rads = radians((float)(myPointDirection + angleOffset));
+        myDirectionX += amount * Math.cos(rads);
+        myDirectionY += amount * Math.sin(rads);
     }
     public void move() {
         // Turn player to mouse angle
         turnTo(getMouseAngle());
         // Set movement based on player input
         if(forward || backward || right || left) {
-            float angle = 0;
             if(forward) {
-                angle = 180;
-                player.accelerate(0.5);
+                player.accelerate(acceleration);
+                // Spawn particles
+                drawParticles(1, 10, 180, 20, color(255, 133, 25));
+                drawParticles(1, 10, 180, 20, color(255, 238, 107));
+                drawParticles(1, 10, 180, 20, color(255, 75, 51));
             }
-            if(backward) {
-                angle = 0;
-                player.accelerate(-0.5);
+            if(right) {
+                player.accelerate(acceleration/2, 90);
+                // Spawn particles
+                drawParticles(1, 5, 90, 10, color(255, 133, 25));
+                drawParticles(1, 5, 90, 10, color(255, 238, 107));
+                drawParticles(1, 5, 90, 10, color(255, 75, 51));
             }
-            // Spawn particles
-            for(int i = 0; i < 3; i++) { // Orange particles
-                Particle obj = new Particle();
-                obj.setX((float)player.getX());
-                obj.setY((float)player.getY());
-                obj.setColor(color(255, 133, 25));
-                obj.setVelocity((float)(10 * Math.random()));
-                obj.setVelocityAngle((float)radians((float)(getMouseAngle() - angle + (20 * Math.random() - 10))));
-                particleList.add(obj);
+            if(left) {
+                player.accelerate(acceleration/2, -90);
+                // Spawn particles
+                drawParticles(1, 5, -90, 10, color(255, 133, 25));
+                drawParticles(1, 5, -90, 10, color(255, 238, 107));
+                drawParticles(1, 5, -90, 10, color(255, 75, 51));
             }
-            for(int i = 0; i < 3; i++) { // Yellow particles
-                Particle obj = new Particle();
-                obj.setX((float)player.getX());
-                obj.setY((float)player.getY());
-                obj.setColor(color(255, 238, 107));
-                obj.setVelocity((float)(10 * Math.random()));
-                obj.setVelocityAngle((float)radians((float)(getMouseAngle() - angle + (20 * Math.random() - 10))));
-                particleList.add(obj);
-            }
-            for(int i = 0; i < 3; i++) { // Red particles
-                Particle obj = new Particle();
-                obj.setX((float)player.getX());
-                obj.setY((float)player.getY());
-                obj.setColor(color(255, 75, 51));
-                obj.setVelocity((float)(10 * Math.random()));
-                obj.setVelocityAngle((float)radians((float)(getMouseAngle() - angle + (20 * Math.random() - 10))));
-                particleList.add(obj);
+            if(backward) { // Brakes
+                player.myDirectionX *= 0.95;
+                player.myDirectionY *= 0.95;
             }
         }
         super.move(); // Calls floater class
@@ -95,15 +91,6 @@ class Spaceship extends Floater {
         hyperspacing = input;
     }
     public void hyperSpace() { // Teleports the spaceship to a random position rotation
-        // Spawn particles at original position
-        for(int i = 0; i < 50; i++) {
-            Particle obj = new Particle();
-            obj.setX((float)player.getX());
-            obj.setY((float)player.getY());
-            obj.setVelocity((float)(10 * Math.random()));
-            obj.setVelocityAngle((float)(radians((float)Math.random() * 360)));
-            particleList.add(obj);
-        }
         hyperspacing = true; // Set hyperspacing to true
         // Picks random position
         myCenterX = width * Math.random();
@@ -112,12 +99,16 @@ class Spaceship extends Floater {
         myDirectionX = 0;
         myDirectionY = 0;
         // Spawn particles
-        for(int i = 0; i < 50; i++) {
+        drawParticles(50, 10, 0, 360, color(255));
+    }
+    private void drawParticles(int numOfParticles, float speed, float angle, float angleVariation, int particleColor) { // Draws particles
+        for(int i = 0; i < numOfParticles; i++) { // Red particles
             Particle obj = new Particle();
             obj.setX((float)player.getX());
             obj.setY((float)player.getY());
-            obj.setVelocity((float)(10 * Math.random()));
-            obj.setVelocityAngle((float)(radians((float)Math.random() * 360)));
+            obj.setColor(particleColor);
+            obj.setVelocity((float)(speed * Math.random()));
+            obj.setVelocityAngle((float)radians((float)(getMouseAngle() - angle + (angleVariation * Math.random() - angleVariation/2))));
             particleList.add(obj);
         }
     }

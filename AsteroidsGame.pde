@@ -81,4 +81,3 @@ public void draw() {
 public void fadeInBackground() { // Fades in the background
   backgroundColor = lerpColor(backgroundColor, originalBackgroundColor, 0.05);
 }
-
