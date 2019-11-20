@@ -1,16 +1,32 @@
 class Asteroid extends Floater {
     private float rotationSpeed; // In degrees
+    private PShape myShape; // The shape of the asteroid
     public Asteroid() {
         // Initializes the asteroid shape
-        corners = 10;
-        xCorners = new int[]{20, 8, -2, -10, -19, -22, -11, -3, 7, 15};
-        yCorners = new int[]{0, 11, 20, 11, -2, -10, -16, -20, -14, -4};
+        corners = 16;
+        xCorners = new int[]{-20, -10, 0, 10, 20, 20, 20, 20, 20, 10, 0, -10, -20, -20, -20, -20};
+        yCorners = new int[]{20, 20, 20, 20, 20, 10, 0, -10, -20, -20, -20, -20, -20, -10, 0, 10};
+        // Randomizes the shape of the asteroid
+        for(int i = 0; i < xCorners.length; i++) {
+            xCorners[i] += (int)(11 * Math.random()) - 5;
+        }
+        for(int i = 0; i < yCorners.length; i++) {
+            yCorners[i] += (int)(11 * Math.random()) - 5;
+        }
+        // Creates and stores the shape of the asteroid
+        myShape = createShape();
+        myShape.beginShape();
+        for(int i = 0; i < xCorners.length; i++) {
+            myShape.vertex(xCorners[i], yCorners[i]);
+        }
+        myShape.endShape();
+        // Makes the asteroid brown
         myColor = color(173, 137, 64);
         // Gives asteroid random position and speed
         myCenterX = width * Math.random();
         myCenterY = height * Math.random();
-        myDirectionX = 10 * Math.random();
-        myDirectionY = 10 * Math.random();
+        myDirectionX = 10 * Math.random() - 5;
+        myDirectionY = 10 * Math.random() - 5;
         // Gives asteroid random rotation and rotation speed
         myPointDirection = 360 * Math.random();
         rotationSpeed = (float)(10 * Math.random() - 10);
@@ -32,5 +48,20 @@ class Asteroid extends Floater {
     public void move() {
         turn(rotationSpeed);
         super.move();
+    }
+    public void show() {
+        fill(myColor);   
+        stroke(myColor);    
+        //translate the (x,y) center of the ship to the correct position
+        translate((float)myCenterX, (float)myCenterY);
+        //convert degrees to radians for rotate()     
+        float dRadians = (float)(myPointDirection*(Math.PI/180));
+        //rotate so that the polygon will be drawn in the correct direction
+        rotate(dRadians);
+        //draw the polygon
+        shape(myShape, 0, 0);
+        //"unrotate" and "untranslate" in reverse order
+        rotate(-1*dRadians);
+        translate(-1*(float)myCenterX, -1*(float)myCenterY);
     }
 }

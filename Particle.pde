@@ -16,6 +16,7 @@ class Particle {
     }
     public void show() {
         fill(myColor);
+        stroke(myColor);
         ellipse(x, y, size, size);
     }
     public float getX() {
