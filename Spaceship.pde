@@ -22,8 +22,8 @@ class Spaceship extends Floater {
         // Set acceleration
         acceleration = 0.15;
     }
-    public void accelerate(float amount, float angleOffset) { // Modified acceleration for custom angles
-        float rads = radians((float)(myPointDirection + angleOffset));
+    public void accelerate(float amount, float angle) { // Modified acceleration for custom angles
+        float rads = radians(angle);
         myDirectionX += amount * Math.cos(rads);
         myDirectionY += amount * Math.sin(rads);
     }
@@ -32,30 +32,39 @@ class Spaceship extends Floater {
         turnTo(getMouseAngle());
         // Set movement based on player input
         if(forward || backward || right || left) {
-            if(forward) {
-                player.accelerate(acceleration);
-                // Spawn particles
-                drawParticles(1, 10, 180, 20, color(255, 133, 25));
-                drawParticles(1, 10, 180, 20, color(255, 238, 107));
-                drawParticles(1, 10, 180, 20, color(255, 75, 51));
+            if(forward && right) { // Combination inputs
+                player.accelerate(acceleration, 315);
+                spawnFumes(135);
             }
-            if(right) {
-                player.accelerate(acceleration/2, 90);
-                // Spawn particles
-                drawParticles(1, 5, 90, 10, color(255, 133, 25));
-                drawParticles(1, 5, 90, 10, color(255, 238, 107));
-                drawParticles(1, 5, 90, 10, color(255, 75, 51));
+            else if(forward && left) {
+                player.accelerate(acceleration, 225);
+                spawnFumes(45);
             }
-            if(left) {
-                player.accelerate(acceleration/2, -90);
-                // Spawn particles
-                drawParticles(1, 5, -90, 10, color(255, 133, 25));
-                drawParticles(1, 5, -90, 10, color(255, 238, 107));
-                drawParticles(1, 5, -90, 10, color(255, 75, 51));
+            else if(backward && right) {
+                player.accelerate(acceleration, 45);
+                spawnFumes(225);
             }
-            if(backward) { // Brakes
-                player.myDirectionX *= 0.95;
-                player.myDirectionY *= 0.95;
+            else if(backward && left) {
+                player.accelerate(acceleration, 135);
+                spawnFumes(315);
+            }
+            else { // Single inputs
+                if(forward) {
+                    player.accelerate(acceleration, 270);
+                    spawnFumes(90);
+                }
+                if(backward) { // Brakes
+                    player.accelerate(acceleration, 90);
+                    spawnFumes(270);
+                }
+                if(right) {
+                    player.accelerate(acceleration, 0);
+                    spawnFumes(180);
+                }
+                if(left) {
+                    player.accelerate(acceleration, 180);
+                    spawnFumes(0);
+                }
             }
         }
         super.move(); // Calls floater class
@@ -101,16 +110,21 @@ class Spaceship extends Floater {
         myDirectionX = 0;
         myDirectionY = 0;
         // Spawn particles
-        drawParticles(50, 10, 0, 360, color(255));
+        spawnParticles(50, 10, 0, 360, color(255));
     }
-    private void drawParticles(int numOfParticles, float speed, float angle, float angleVariation, int particleColor) { // Draws particles
+    private void spawnFumes(float angle) { // Spawns fumes for a rocket
+        spawnParticles(1, 5, angle, 20, color(255, 133, 25));
+        spawnParticles(1, 5, angle, 20, color(255, 238, 107));
+        spawnParticles(1, 5, angle, 20, color(255, 75, 51));
+    }
+    private void spawnParticles(int numOfParticles, float speed, float angle, float angleVariation, int particleColor) { // Spawns particles
         for(int i = 0; i < numOfParticles; i++) { // Red particles
             Particle obj = new Particle();
             obj.setX((float)player.getX());
             obj.setY((float)player.getY());
             obj.setColor(particleColor);
             obj.setVelocity((float)(speed * Math.random()));
-            obj.setVelocityAngle((float)radians((float)(getMouseAngle() - angle + (angleVariation * Math.random() - angleVariation/2))));
+            obj.setVelocityAngle((float)radians((float)(angle + (angleVariation * Math.random() - angleVariation/2))));
             particleList.add(obj);
         }
     }
