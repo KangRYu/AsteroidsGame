@@ -1,11 +1,13 @@
 // States
 Spaceship player;
 ArrayList<Star> starList = new ArrayList<Star>();
+ArrayList<Asteroid> asteroidList = new ArrayList<Asteroid>();
 ArrayList<Particle> particleList = new ArrayList<Particle>();
 int originalBackgroundColor; // The original background color so that when hyperspacing the background can return to its original color
-int backgroundColor;
+int backgroundColor; // The current background color
 // Properties
 int numOfStars = 100;
+int numOfAsteroids = 10;
 
 void keyPressed() {
   if(key == 'w') {
@@ -51,6 +53,10 @@ public void setup() {
   for(int i = 0; i < numOfStars; i++) {
     starList.add(new Star());
   }
+  // Instances initial asteroids
+  for(int i = 0; i < numOfAsteroids; i++) {
+    asteroidList.add(new Asteroid());
+  }
 }
 public void draw() {
   // Lerp background color back to the original color, for hyperspacing
@@ -60,6 +66,11 @@ public void draw() {
   // Draws all stars
   for(Star stars : starList) {
     stars.show();
+  }
+  // Draws all asteroids
+  for(Asteroid asteroid : asteroidList) {
+    asteroid.move();
+    asteroid.show();
   }
   // Draws all particles
   for(Particle particles : particleList) {

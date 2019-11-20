@@ -8,8 +8,10 @@ class Spaceship extends Floater {
         xCorners = new int[]{-12, -5, -12, 20};
         yCorners = new int[]{-12, 0, 12, 0};
         myColor = color(90, 255, 150);
+        // Initialize spaceship position into center
         myCenterX = width/2;
         myCenterY = height/2;
+        // Initialize speed and point direction
         myDirectionX = 0;
         myDirectionY = 0;
         myPointDirection = 180;
