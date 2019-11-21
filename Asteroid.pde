@@ -17,13 +17,13 @@ class Asteroid extends Floater {
         }
         // Creates and stores the shape of the asteroid
         myShape = createShape();
-        noStroke();
         myShape.beginShape();
         for(int i = 0; i < xCorners.length; i++) {
             myShape.vertex(xCorners[i], yCorners[i]);
         }
         myShape.endShape();
         myShape.setFill(myColor);
+        myShape.setStrokeWeight(0);
         // Gives asteroid random position and speed
         myCenterX = width * Math.random();
         myCenterY = height * Math.random();
@@ -51,9 +51,7 @@ class Asteroid extends Floater {
         turn(rotationSpeed);
         super.move();
     }
-    public void show() {
-        fill(myColor);   
-        stroke(myColor);    
+    public void show() {  
         //translate the (x,y) center of the ship to the correct position
         translate((float)myCenterX, (float)myCenterY);
         //convert degrees to radians for rotate()     

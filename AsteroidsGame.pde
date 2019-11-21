@@ -80,12 +80,17 @@ public void draw() {
     asteroid.move();
     asteroid.show();
   }
-  // Detects for collision
+  // Detects for collision and remove asteroids accordingly
+  ArrayList<Asteroid> keepedAsteroids = new ArrayList<Asteroid>();
   for(Asteroid asteroid : asteroidList) {
     if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= 20) {
       backgroundColor = color(255, 0, 0);
     }
+    else {
+      keepedAsteroids.add(asteroid);
+    }
   }
+  asteroidList = keepedAsteroids;
   // Remove non moving particles
   ArrayList<Particle> keepedParticles = new ArrayList<Particle>();
   for(Particle particles : particleList) {
