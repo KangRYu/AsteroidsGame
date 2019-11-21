@@ -67,15 +67,24 @@ public void draw() {
   for(Star stars : starList) {
     stars.show();
   }
+  // Draws all particles
+  for(Particle particles : particleList) {
+    particles.move();
+    particles.show();
+  }
+  // Updates player
+  player.show();
+  player.move();
   // Draws all asteroids
   for(Asteroid asteroid : asteroidList) {
     asteroid.move();
     asteroid.show();
   }
-  // Draws all particles
-  for(Particle particles : particleList) {
-    particles.move();
-    particles.show();
+  // Detects for collision
+  for(Asteroid asteroid : asteroidList) {
+    if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= 20) {
+      backgroundColor = color(255, 0, 0);
+    }
   }
   // Remove non moving particles
   ArrayList<Particle> keepedParticles = new ArrayList<Particle>();
@@ -85,10 +94,11 @@ public void draw() {
     }
   }
   particleList = keepedParticles;
-  // Updates player
-  player.show();
-  player.move();
 }
 public void fadeInBackground() { // Fades in the background
+  int firstColor = backgroundColor;
   backgroundColor = lerpColor(backgroundColor, originalBackgroundColor, 0.05);
+  if(firstColor == backgroundColor) {
+    backgroundColor = originalBackgroundColor;
+  }
 }

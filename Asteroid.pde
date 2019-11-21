@@ -2,6 +2,8 @@ class Asteroid extends Floater {
     private float rotationSpeed; // In degrees
     private PShape myShape; // The shape of the asteroid
     public Asteroid() {
+        // Makes the asteroid brown
+        myColor = color(173, 137, 64);
         // Initializes the asteroid shape
         corners = 16;
         xCorners = new int[]{-20, -10, 0, 10, 20, 20, 20, 20, 20, 10, 0, -10, -20, -20, -20, -20};
@@ -15,18 +17,18 @@ class Asteroid extends Floater {
         }
         // Creates and stores the shape of the asteroid
         myShape = createShape();
+        noStroke();
         myShape.beginShape();
         for(int i = 0; i < xCorners.length; i++) {
             myShape.vertex(xCorners[i], yCorners[i]);
         }
         myShape.endShape();
-        // Makes the asteroid brown
-        myColor = color(173, 137, 64);
+        myShape.setFill(myColor);
         // Gives asteroid random position and speed
         myCenterX = width * Math.random();
         myCenterY = height * Math.random();
-        myDirectionX = 10 * Math.random() - 5;
-        myDirectionY = 10 * Math.random() - 5;
+        myDirectionX = 7 * Math.random() - 3;
+        myDirectionY = 7 * Math.random() - 3;
         // Gives asteroid random rotation and rotation speed
         myPointDirection = 360 * Math.random();
         rotationSpeed = (float)(10 * Math.random() - 10);
@@ -63,5 +65,11 @@ class Asteroid extends Floater {
         //"unrotate" and "untranslate" in reverse order
         rotate(-1*dRadians);
         translate(-1*(float)myCenterX, -1*(float)myCenterY);
+    }
+    public double getX() {
+        return myCenterX;
+    }
+    public double getY() {
+        return myCenterY;
     }
 }
