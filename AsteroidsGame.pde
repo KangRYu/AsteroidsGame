@@ -10,16 +10,16 @@ int numOfStars = 100;
 int numOfAsteroids = 10;
 
 void keyPressed() {
-  if(key == 'w') {
+  if(key == 'w' || keyCode == UP) {
     player.setForward(true);
   }
-  if(key == 's') {
+  if(key == 's' || keyCode == DOWN) {
     player.setBackward(true);
   }
-  if(key == 'd') {
+  if(key == 'd' || keyCode == RIGHT) {
     player.setRight(true);
   }
-  if(key == 'a') {
+  if(key == 'a' || keyCode == LEFT) {
     player.setLeft(true);
   }
   if(key == 'h') {
@@ -28,16 +28,16 @@ void keyPressed() {
   }
 }
 void keyReleased() {
-  if(key == 'w') {
+  if(key == 'w' || keyCode == UP) {
     player.setForward(false);
   }
-  if(key == 's') {
+  if(key == 's' || keyCode == DOWN) {
     player.setBackward(false);
   }
-  if(key == 'd') {
+  if(key == 'd' || keyCode == RIGHT) {
     player.setRight(false);
   }
-  if(key == 'a') {
+  if(key == 'a' || keyCode == LEFT) {
     player.setLeft(false);
   }
 }
@@ -83,7 +83,7 @@ public void draw() {
   // Detects for collision and remove asteroids accordingly
   ArrayList<Asteroid> keepedAsteroids = new ArrayList<Asteroid>();
   for(Asteroid asteroid : asteroidList) {
-    if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= 20) {
+    if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance()) {
       backgroundColor = color(255, 0, 0);
     }
     else {

@@ -1,5 +1,6 @@
 class Asteroid extends Floater {
     private float rotationSpeed; // In degrees
+    private float collisionDistance; // The distance where an object would collide with this asteroid
     private PShape myShape; // The shape of the asteroid
     public Asteroid() {
         // Makes the asteroid brown
@@ -8,6 +9,14 @@ class Asteroid extends Floater {
         corners = 16;
         xCorners = new int[]{-20, -10, 0, 10, 20, 20, 20, 20, 20, 10, 0, -10, -20, -20, -20, -20};
         yCorners = new int[]{20, 20, 20, 20, 20, 10, 0, -10, -20, -20, -20, -20, -20, -10, 0, 10};
+        // Calculates collision distance
+        collisionDistance = 0;
+        for(int i = 0; i < corners; i++) {
+            float distance = dist(0, 0, xCorners[i], yCorners[i]);
+            if(distance > collisionDistance) {
+                collisionDistance = distance;
+            }
+        }
         // Randomizes the shape of the asteroid
         for(int i = 0; i < xCorners.length; i++) {
             xCorners[i] += (int)(11 * Math.random()) - 5;
@@ -69,5 +78,8 @@ class Asteroid extends Floater {
     }
     public double getY() {
         return myCenterY;
+    }
+    public float getCollisionDistance() {
+        return collisionDistance;
     }
 }
