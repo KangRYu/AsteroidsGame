@@ -8,6 +8,19 @@ class Asteroid extends Floater {
         corners = 16;
         xCorners = new int[]{-20, -10, 0, 10, 20, 20, 20, 20, 20, 10, 0, -10, -20, -20, -20, -20};
         yCorners = new int[]{20, 20, 20, 20, 20, 10, 0, -10, -20, -20, -20, -20, -20, -10, 0, 10};
+        // Randomizes asteroid shape
+        for(int i = 1; i <= 3; i++) {
+            yCorners[i] += (int)(10 * Math.random());
+        }
+        for(int i = 5; i <= 7; i++) {
+            xCorners[i] += (int)(10 * Math.random());
+        }
+        for(int i = 9; i <= 11; i++) {
+            yCorners[i] -= (int)(10 * Math.random());
+        }
+        for(int i = 13; i <= 15; i++) {
+            xCorners[i] -= (int)(10 * Math.random());
+        }
         // Calculates collision distance
         collisionDistance = 0;
         for(int i = 0; i < corners; i++) {
@@ -15,13 +28,6 @@ class Asteroid extends Floater {
             if(distance > collisionDistance) {
                 collisionDistance = distance;
             }
-        }
-        // Randomizes the shape of the asteroid
-        for(int i = 0; i < xCorners.length; i++) {
-            xCorners[i] += (int)(11 * Math.random()) - 5;
-        }
-        for(int i = 0; i < yCorners.length; i++) {
-            yCorners[i] += (int)(11 * Math.random()) - 5;
         }
         // Gives asteroid random position and speed
         myCenterX = width * Math.random();

@@ -91,6 +91,13 @@ public void draw() {
     }
   }
   asteroidList = keepedAsteroids;
+  // Add new asteroids if there is less then the set amount
+  if(asteroidList.size() < numOfAsteroids) {
+    for(int i = 0; i < numOfAsteroids - asteroidList.size(); i++) {
+      asteroidList.add(new Asteroid());
+    }
+  }
+  System.out.println(asteroidList.size());
   // Remove non moving particles
   ArrayList<Particle> keepedParticles = new ArrayList<Particle>();
   for(Particle particles : particleList) {
