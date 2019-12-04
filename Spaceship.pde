@@ -1,5 +1,6 @@
 class Spaceship extends Floater {
     private boolean forward, backward, left, right; // The direction of acceleration
+    private float maxSpeed;
     private float acceleration; // Magnitude of acceleration
     private boolean hyperspacing;
     public Spaceship() {
@@ -21,11 +22,20 @@ class Spaceship extends Floater {
         hyperspacing = false;
         // Set acceleration
         acceleration = 0.15;
+        // Set max speed
+        maxSpeed = 15;
     }
     public void accelerate(float amount, float angle) { // Modified acceleration for custom angles
         float rads = radians(angle);
         myDirectionX += amount * Math.cos(rads);
         myDirectionY += amount * Math.sin(rads);
+        // Cap speed
+        float speed = sqrt(pow((float)myDirectionX, 2) + pow((float)myDirectionY, 2));
+        if(speed > maxSpeed) {
+            float directionAngle = atan2((float)myDirectionY, (float)myDirectionX); // The angle of movement
+            myDirectionX = maxSpeed * Math.cos(directionAngle);
+            myDirectionY = maxSpeed * Math.sin(directionAngle);
+        }
     }
     public void move() {
         // Turn player to mouse angle
