@@ -1,14 +1,23 @@
 class Spaceship extends Floater {
     private boolean forward, backward, left, right; // The direction of acceleration
+    private float collisionDistance; // The distance until the spaceship collides with another object
     private float maxSpeed;
     private float acceleration; // Magnitude of acceleration
     private boolean hyperspacing;
     public Spaceship() {
         // Initalizes all the corners
-        corners = 4;
-        xCorners = new int[]{-12, -5, -12, 20};
-        yCorners = new int[]{-12, 0, 12, 0};
+        corners = 10;
+        xCorners = new int[]{-16, -12, 0, 16, 0, -3, 0, 16, 0, -12};
+        yCorners = new int[]{0, 12, 16, 8, 10, 0, -10, -8, -16, -12};
         myColor = color(90, 255, 150);
+        // Initialize the collision distance
+        collisionDistance = 0;
+        for(int i = 0; i < corners; i++) {
+            float distance = dist(0, 0, xCorners[i], yCorners[i]);
+            if(distance > collisionDistance) {
+                collisionDistance = distance;
+            }
+        }
         // Initialize spaceship position into center
         myCenterX = width/2;
         myCenterY = height/2;
@@ -111,6 +120,9 @@ class Spaceship extends Floater {
     public void setHyperspace(boolean input) {
         hyperspacing = input;
     }
+    public float getCollisionDistance() {
+        return collisionDistance;
+    }
     public void hyperSpace() { // Teleports the spaceship to a random position rotation
         hyperspacing = true; // Set hyperspacing to true
         // Picks random position
@@ -120,22 +132,19 @@ class Spaceship extends Floater {
         myDirectionX = 0;
         myDirectionY = 0;
         // Spawn particles
-        spawnParticles(50, 10, 0, 360, color(255));
+        spawnParticles((float)myCenterX, (float)myCenterY, 50, 10, 0, 360, color(255));
     }
     private void spawnFumes(float angle) { // Spawns fumes for a rocket
-        spawnParticles(1, 5, angle, 20, color(255, 133, 25));
-        spawnParticles(1, 5, angle, 20, color(255, 238, 107));
-        spawnParticles(1, 5, angle, 20, color(255, 75, 51));
-    }
-    private void spawnParticles(int numOfParticles, float speed, float angle, float angleVariation, int particleColor) { // Spawns particles
-        for(int i = 0; i < numOfParticles; i++) { // Red particles
-            Particle obj = new Particle();
-            obj.setX((float)player.getX());
-            obj.setY((float)player.getY());
-            obj.setColor(particleColor);
-            obj.setVelocity((float)(speed * Math.random()));
-            obj.setVelocityAngle((float)radians((float)(angle + (angleVariation * Math.random() - angleVariation/2))));
-            particleList.add(obj);
-        }
+        // Initialized spawn origin of particles
+        float positionX = (float)myCenterX;
+        float positionY = (float)myCenterY;
+        // Calculate the direction the spaceship is pointing
+        float pointAngle = atan2(mouseY - positionY, mouseX - positionX);
+        // Move the particles spawn origin backward, based on the direction the spaceship is pointing
+        positionY -= 10 * sin((float)pointAngle);
+        // Spawn particles
+        spawnParticles(positionX, positionY, 1, 5, angle, 20, color(255, 133, 25));
+        spawnParticles(positionX, positionY, 1, 5, angle, 20, color(255, 238, 107));
+        spawnParticles(positionX, positionY, 1, 5, angle, 20, color(255, 75, 51));
     }
 }

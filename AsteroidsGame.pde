@@ -9,7 +9,7 @@ int backgroundColor; // The current background color
 int numOfStars = 100;
 int numOfAsteroids = 10;
 
-void keyPressed() {
+public void keyPressed() {
   if(key == 'w' || keyCode == UP) {
     player.setForward(true);
   }
@@ -27,7 +27,7 @@ void keyPressed() {
     backgroundColor = color(255);
   }
 }
-void keyReleased() {
+public void keyReleased() {
   if(key == 'w' || keyCode == UP) {
     player.setForward(false);
   }
@@ -83,7 +83,7 @@ public void draw() {
   // Detects for collision and remove asteroids accordingly
   ArrayList<Asteroid> keepedAsteroids = new ArrayList<Asteroid>();
   for(Asteroid asteroid : asteroidList) {
-    if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance()) {
+    if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance() + player.getCollisionDistance()) {
       backgroundColor = color(255, 0, 0);
     }
     else {
@@ -97,7 +97,6 @@ public void draw() {
       asteroidList.add(new Asteroid());
     }
   }
-  System.out.println(asteroidList.size());
   // Remove non moving particles
   ArrayList<Particle> keepedParticles = new ArrayList<Particle>();
   for(Particle particles : particleList) {
@@ -112,5 +111,16 @@ public void fadeInBackground() { // Fades in the background
   backgroundColor = lerpColor(backgroundColor, originalBackgroundColor, 0.05);
   if(firstColor == backgroundColor) {
     backgroundColor = originalBackgroundColor;
+  }
+}
+public void spawnParticles(float posX, float posY, int numOfParticles, float speed, float angle, float angleVariation, int particleColor) { // Spawns particles
+  for(int i = 0; i < numOfParticles; i++) {
+    Particle obj = new Particle();
+    obj.setX(posX);
+    obj.setY(posY);
+    obj.setColor(particleColor);
+    obj.setVelocity((float)(speed * Math.random()));
+    obj.setVelocityAngle((float)radians((float)(angle + (angleVariation * Math.random() - angleVariation/2))));
+    particleList.add(obj);
   }
 }
