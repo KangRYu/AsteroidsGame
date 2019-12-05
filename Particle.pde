@@ -1,13 +1,22 @@
 class Particle {
     private float x, y;
-    private float rotation;
     private float velocity;
     private float velocityAngle; // In radians
     private float size;
     private int myColor;
-    public Particle() {
+    public Particle() { // No arguement constructor
         size = (float)(10 * Math.random());
         myColor = color(255);
+        velocity = 0;
+        velocityAngle = 0;
+    }
+    public Particle(float argX, float argY, float argVelocity, float argVelocityAngle, int argColor) { // Optional constructor
+        size = (float)(10 * Math.random());
+        x = argX;
+        y = argY;
+        velocity = argVelocity;
+        velocityAngle = argVelocityAngle;
+        myColor = argColor;
     }
     public void move() {
         x += velocity * Math.cos(velocityAngle);

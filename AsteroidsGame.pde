@@ -115,12 +115,9 @@ public void fadeInBackground() { // Fades in the background
 }
 public void spawnParticles(float posX, float posY, int numOfParticles, float speed, float angle, float angleVariation, int particleColor) { // Spawns particles
   for(int i = 0; i < numOfParticles; i++) {
-    Particle obj = new Particle();
-    obj.setX(posX);
-    obj.setY(posY);
-    obj.setColor(particleColor);
-    obj.setVelocity((float)(speed * Math.random()));
-    obj.setVelocityAngle((float)radians((float)(angle + (angleVariation * Math.random() - angleVariation/2))));
+    float velocity = (float)(speed * Math.random());
+    float velocityAngle = (float)radians((float)(angle + (angleVariation * Math.random() - angleVariation/2)));
+    Particle obj = new Particle(posX, posY, velocity, velocityAngle, particleColor);
     particleList.add(obj);
   }
 }
