@@ -18,6 +18,10 @@ class Particle {
         velocityAngle = argVelocityAngle;
         myColor = argColor;
     }
+    public void update() {
+        move();
+        show();
+    }
     public void move() {
         x += velocity * Math.cos(velocityAngle);
         y += velocity * Math.sin(velocityAngle);

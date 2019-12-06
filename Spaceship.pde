@@ -1,5 +1,6 @@
 class Spaceship extends Floater {
     private boolean forward, backward, left, right; // The direction of acceleration
+    private boolean shooting;
     private float collisionDistance; // The distance until the spaceship collides with another object
     private float maxSpeed;
     private float acceleration; // Magnitude of acceleration
@@ -46,6 +47,11 @@ class Spaceship extends Floater {
             myDirectionY = maxSpeed * Math.sin(directionAngle);
         }
     }
+    public void update() { // Calls all the necesary functions for an update
+        move();
+        shoot();
+        show();
+    }
     public void move() {
         // Turn player to mouse angle
         turnTo(getMouseAngle());
@@ -87,6 +93,12 @@ class Spaceship extends Floater {
             }
         }
         super.move(); // Calls floater class
+    }
+    public void shoot() {
+        if(shooting) {
+            Bullet obj = new Bullet(myCenterX, myCenterY, 30, myPointDirection);
+            bulletList.add(obj);
+        }
     }
     public float getMouseAngle() { // Returns the angle of the mouse relative to the player in degrees
         double x = mouseX - player.getX();
@@ -146,5 +158,8 @@ class Spaceship extends Floater {
         spawnParticles(positionX, positionY, 1, 5, angle, 20, color(255, 133, 25));
         spawnParticles(positionX, positionY, 1, 5, angle, 20, color(255, 238, 107));
         spawnParticles(positionX, positionY, 1, 5, angle, 20, color(255, 75, 51));
+    }
+    public void setShooting(boolean argBool) {
+        shooting = argBool;
     }
 }

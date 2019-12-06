@@ -49,6 +49,10 @@ class Asteroid extends Floater {
         myPointDirection = 360 * Math.random();
         rotationSpeed = (float)(10 * Math.random() - 10);
     }
+    public void update() {
+        move();
+        show();
+    }
     public void turn(float argRotation) { // Overwrites floater turn to use floats instead of integers
         myPointDirection += argRotation;
     }

@@ -2,6 +2,7 @@
 Spaceship player;
 ArrayList<Star> starList = new ArrayList<Star>();
 ArrayList<Asteroid> asteroidList = new ArrayList<Asteroid>();
+ArrayList<Bullet> bulletList = new ArrayList<Bullet>();
 ArrayList<Particle> particleList = new ArrayList<Particle>();
 int originalBackgroundColor; // The original background color so that when hyperspacing the background can return to its original color
 int backgroundColor; // The current background color
@@ -41,6 +42,12 @@ public void keyReleased() {
     player.setLeft(false);
   }
 }
+public void mousePressed() {
+  player.setShooting(true);
+}
+public void mouseReleased() {
+  player.setShooting(false);
+}
 public void setup() {
   // Style settings
   size(500, 500);
@@ -69,16 +76,17 @@ public void draw() {
   }
   // Draws all particles
   for(Particle particles : particleList) {
-    particles.move();
-    particles.show();
+    particles.update();
+  }
+  // Draws all bullets
+  for(Bullet bullets : bulletList) {
+    bullets.update();
   }
   // Updates player
-  player.show();
-  player.move();
+  player.update();
   // Draws all asteroids
   for(Asteroid asteroid : asteroidList) {
-    asteroid.move();
-    asteroid.show();
+    asteroid.update();
   }
   // Detects for collision and remove asteroids accordingly
   ArrayList<Asteroid> keepedAsteroids = new ArrayList<Asteroid>();
