@@ -8,6 +8,14 @@ class Bullet extends Floater {
       myDirectionY = argSpeed * sin(radians((float)argAngle));
       myColor = color(255);
   }
+  public Bullet(argShip : Spaceship) {
+    myCenterX = argShip.getX();
+    myCenterY = argShip.getY();
+    myPointDirection = argShip.getPointDirection();
+    myDirectionX = 100 * cos(radians((float)myPointDirection));
+    myDirectionY = 100 * sin(radians((float)myPointDirection));
+    myColor = color(255);
+  }
   public void update() {
     move();
     show();
