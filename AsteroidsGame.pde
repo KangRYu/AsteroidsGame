@@ -89,21 +89,38 @@ public void draw() {
     asteroid.update();
   }
   // Detects for collision and remove asteroids accordingly
-  ArrayList<Asteroid> keepedAsteroids = new ArrayList<Asteroid>();
+  ArrayList<Asteroid> asteroidsToRemove = new ArrayList<Asteroid>();
   for(Asteroid asteroid : asteroidList) {
     if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance() + player.getCollisionDistance()) {
       backgroundColor = color(255, 0, 0);
-    }
-    else {
-      keepedAsteroids.add(asteroid);
+      if(!asteroidsToRemove.contains(asteroid)) {
+        asteroidsToRemove.add(asteroid);
+      }
     }
   }
-  asteroidList = keepedAsteroids;
+  for(Asteroid asteroid : asteroidsToRemove) {
+    asteroidList.remove(asteroid);
+  }
   // Add new asteroids if there is less then the set amount
   if(asteroidList.size() < numOfAsteroids) {
     for(int i = 0; i < numOfAsteroids - asteroidList.size(); i++) {
       asteroidList.add(new Asteroid());
     }
+  }
+  // Detects for collision between bullets and asteroids and removes accordingly
+  ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>(); // A ;ist of all bullets that are going to be removed
+  for(Bullet bullet : bulletList) {
+    for(Asteroid asteroid : asteroidList) {
+      if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)bullet.getX(), (float)bullet.getY()) <= asteroid.getCollisionDistance() + bullet.getCollisionDistance()) {
+        backgroundColor = color(255, 255, 255);
+        if(!bulletsToRemove.contains(bullet)) {
+          bulletsToRemove.add(bullet);
+        }
+      }
+    }
+  }
+  for(Bullet bullet : bulletsToRemove) { // Removes each terminated bullet from the bullet list
+    bulletList.remove(bullet);
   }
   // Remove non moving particles
   ArrayList<Particle> keepedParticles = new ArrayList<Particle>();

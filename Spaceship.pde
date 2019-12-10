@@ -1,6 +1,8 @@
 class Spaceship extends Floater {
     private boolean forward, backward, left, right; // The direction of acceleration
     private boolean shooting;
+    private int shootingCooldownAmount; // The current shooting cool down
+    private int shootingCooldown; // What the cool down amount will be equal to when the ship fires
     private float collisionDistance; // The distance until the spaceship collides with another object
     private float maxSpeed;
     private float acceleration; // Magnitude of acceleration
@@ -34,6 +36,9 @@ class Spaceship extends Floater {
         acceleration = 0.15;
         // Set max speed
         maxSpeed = 15;
+        // Set shooting cool down
+        shootingCooldown = 60;
+        shootingCooldownAmount = 0;
     }
     public void accelerate(float amount, float angle) { // Modified acceleration for custom angles
         float rads = radians(angle);
@@ -95,9 +100,13 @@ class Spaceship extends Floater {
         super.move(); // Calls floater class
     }
     public void shoot() {
-        if(shooting) {
-            Bullet obj = new Bullet(myCenterX, myCenterY, 30, myPointDirection);
+        if(shooting && shootingCooldownAmount == 0) {
+            Bullet obj = new Bullet(this);
             bulletList.add(obj);
+            shootingCooldownAmount = shootingCooldown;
+        }
+        else if(shootingCooldownAmount > 0) {
+            shootingCooldownAmount--;
         }
     }
     public float getMouseAngle() { // Returns the angle of the mouse relative to the player in degrees

@@ -1,20 +1,15 @@
 class Bullet extends Floater {
-  public Bullet(double argX, double argY, double argSpeed, double argAngle) {
-      // Initializes values
-      myCenterX = argX;
-      myCenterY = argY;
-      myPointDirection = argAngle;
-      myDirectionX = argSpeed * cos(radians((float)argAngle));
-      myDirectionY = argSpeed * sin(radians((float)argAngle));
-      myColor = color(255);
-  }
-  public Bullet(argShip : Spaceship) {
+  private float collisionDistance;
+  public Bullet(Spaceship argShip) {
     myCenterX = argShip.getX();
     myCenterY = argShip.getY();
     myPointDirection = argShip.getPointDirection();
-    myDirectionX = 100 * cos(radians((float)myPointDirection));
-    myDirectionY = 100 * sin(radians((float)myPointDirection));
+    // Calculates the speed based on the point direction
+    myDirectionX = 30 * cos(radians((float)myPointDirection));
+    myDirectionY = 30 * sin(radians((float)myPointDirection));
     myColor = color(255);
+    // Calculate collision distance
+    collisionDistance = 5;
   }
   public void update() {
     move();
@@ -30,5 +25,14 @@ class Bullet extends Floater {
     // Untranslate and unrotate
     rotate(-radians((float)myPointDirection));
     translate(-(float)myCenterX, -(float)myCenterY);
-  }   
+  }
+  public double getX() {
+    return myCenterX;
+  }
+  public double getY() {
+    return myCenterY;
+  }
+  public float getCollisionDistance() {
+    return collisionDistance;
+  }
 }
