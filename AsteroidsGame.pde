@@ -88,7 +88,7 @@ public void draw() {
   for(Asteroid asteroid : asteroidList) {
     asteroid.update();
   }
-  // Detects for collision and remove asteroids accordingly
+  // Detects collisions
   ArrayList<Asteroid> asteroidsToRemove = new ArrayList<Asteroid>();
   for(Asteroid asteroid : asteroidList) {
     if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance() + player.getCollisionDistance()) {
@@ -96,15 +96,6 @@ public void draw() {
       if(!asteroidsToRemove.contains(asteroid)) {
         asteroidsToRemove.add(asteroid);
       }
-    }
-  }
-  for(Asteroid asteroid : asteroidsToRemove) {
-    asteroidList.remove(asteroid);
-  }
-  // Add new asteroids if there is less then the set amount
-  if(asteroidList.size() < numOfAsteroids) {
-    for(int i = 0; i < numOfAsteroids - asteroidList.size(); i++) {
-      asteroidList.add(new Asteroid());
     }
   }
   // Detects for collision between bullets and asteroids and removes accordingly
@@ -116,11 +107,24 @@ public void draw() {
         if(!bulletsToRemove.contains(bullet)) {
           bulletsToRemove.add(bullet);
         }
+        if(!asteroidsToRemove.contains(asteroid)) {
+          asteroidsToRemove.add(asteroid);
+        }
       }
     }
   }
+  // Removes the objects to remove
+  for(Asteroid asteroid : asteroidsToRemove) {
+    asteroidList.remove(asteroid);
+  }
   for(Bullet bullet : bulletsToRemove) { // Removes each terminated bullet from the bullet list
     bulletList.remove(bullet);
+  }
+  // Add new asteroids if there is less then the set amount
+  if(asteroidList.size() < numOfAsteroids) {
+    for(int i = 0; i < numOfAsteroids - asteroidList.size(); i++) {
+      asteroidList.add(new Asteroid());
+    }
   }
   // Remove non moving particles
   ArrayList<Particle> keepedParticles = new ArrayList<Particle>();
