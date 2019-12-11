@@ -103,7 +103,6 @@ public void draw() {
   for(Bullet bullet : bulletList) {
     for(Asteroid asteroid : asteroidList) {
       if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)bullet.getX(), (float)bullet.getY()) <= asteroid.getCollisionDistance() + bullet.getCollisionDistance()) {
-        backgroundColor = color(255, 255, 255);
         if(!bulletsToRemove.contains(bullet)) {
           bulletsToRemove.add(bullet);
         }
@@ -113,12 +112,24 @@ public void draw() {
       }
     }
   }
+  // Find particles to remove
+  ArrayList<Particle> particlesToRemove = new ArrayList<Particle>();
+  for(Particle particle : particleList) {
+    if(particle.getVelocity() < 1) {
+      particlesToRemove.add(particle);
+    }
+  }
   // Removes the objects to remove
   for(Asteroid asteroid : asteroidsToRemove) {
+    spawnAsteroidParticles((float)asteroid.getX(), (float)asteroid.getY(), 50, 5, 0, 360, asteroid.getColor());
     asteroidList.remove(asteroid);
   }
   for(Bullet bullet : bulletsToRemove) { // Removes each terminated bullet from the bullet list
+    spawnParticles((float)bullet.getX(), (float)bullet.getY(), 20, 5, 0, 360, color(255)); // Bullet collision particles
     bulletList.remove(bullet);
+  }
+  for(Particle particle : particlesToRemove) {
+    particleList.remove(particle);
   }
   // Add new asteroids if there is less then the set amount
   if(asteroidList.size() < numOfAsteroids) {
@@ -126,14 +137,6 @@ public void draw() {
       asteroidList.add(new Asteroid());
     }
   }
-  // Remove non moving particles
-  ArrayList<Particle> keepedParticles = new ArrayList<Particle>();
-  for(Particle particles : particleList) {
-    if(!(particles.getVelocity() < 1)) {
-      keepedParticles.add(particles);
-    }
-  }
-  particleList = keepedParticles;
 }
 public void fadeInBackground() { // Fades in the background
   int firstColor = backgroundColor;
@@ -147,6 +150,14 @@ public void spawnParticles(float posX, float posY, int numOfParticles, float spe
     float velocity = (float)(speed * Math.random());
     float velocityAngle = (float)radians((float)(angle + (angleVariation * Math.random() - angleVariation/2)));
     Particle obj = new Particle(posX, posY, velocity, velocityAngle, particleColor);
+    particleList.add(obj);
+  }
+}
+public void spawnAsteroidParticles(float posX, float posY, int numOfParticles, float speed, float angle, float angleVariation, int particleColor) { // Spawns particles
+  for(int i = 0; i < numOfParticles; i++) {
+    float velocity = (float)(speed * Math.random());
+    float velocityAngle = (float)radians((float)(angle + (angleVariation * Math.random() - angleVariation/2)));
+    Particle obj = new AsteroidParticle(posX, posY, velocity, velocityAngle, particleColor);
     particleList.add(obj);
   }
 }

@@ -1,59 +1,37 @@
-class Particle {
-    private float x, y;
-    private float velocity;
-    private float velocityAngle; // In radians
-    private float size;
-    private int myColor;
-    public Particle() { // No arguement constructor
-        size = (float)(10 * Math.random());
-        myColor = color(255);
-        velocity = 0;
-        velocityAngle = 0;
-    }
+class Particle extends Floater{
+    protected float size;
+    protected boolean customShape;
     public Particle(float argX, float argY, float argVelocity, float argVelocityAngle, int argColor) { // Optional constructor
         size = (float)(10 * Math.random());
-        x = argX;
-        y = argY;
-        velocity = argVelocity;
-        velocityAngle = argVelocityAngle;
+        myCenterX = argX;
+        myCenterY = argY;
+        myDirectionX = argVelocity * cos(argVelocityAngle);
+        myDirectionY = argVelocity * sin(argVelocityAngle);
         myColor = argColor;
+        customShape = false;
     }
     public void update() {
         move();
         show();
     }
     public void move() {
-        x += velocity * Math.cos(velocityAngle);
-        y += velocity * Math.sin(velocityAngle);
-        velocity *= 0.95;
+        super.move();
+        // Damps velocity
+        myDirectionX *= 0.95;
+        myDirectionY *= 0.95;
+        System.out.println(getVelocity());
     }
     public void show() {
-        fill(myColor);
-        stroke(myColor);
-        ellipse(x, y, size, size);
-    }
-    public float getX() {
-        return x;
-    }
-    public void setX(float argX) {
-        x = argX;
-    }
-    public float getY() {
-        return y;
-    }
-    public void setY(float argY) {
-        y = argY;
+        if(customShape) {
+            super.show();
+        }
+        else { // Draws a circle if there is no custom shape
+            fill(myColor);
+            stroke(myColor);
+            ellipse((float)myCenterX, (float)myCenterY, size, size);
+        }
     }
     public float getVelocity() {
-        return velocity;
-    }
-    public void setVelocity(float argVelocity) {
-        velocity = argVelocity;
-    }
-    public void setVelocityAngle(float argVelocityAngle) {
-        velocityAngle = argVelocityAngle;
-    }
-    public void setColor(int argColor) {
-        myColor = argColor;
+        return sqrt(pow((float)myDirectionX, 2) + pow((float)myDirectionY, 2));
     }
 }

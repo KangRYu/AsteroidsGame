@@ -69,4 +69,7 @@ class Asteroid extends Floater {
     public float getCollisionDistance() {
         return collisionDistance;
     }
+    public int getColor() {
+        return myColor;
+    }
 }

@@ -37,7 +37,7 @@ class Spaceship extends Floater {
         // Set max speed
         maxSpeed = 15;
         // Set shooting cool down
-        shootingCooldown = 60;
+        shootingCooldown = 10;
         shootingCooldownAmount = 0;
     }
     public void accelerate(float amount, float angle) { // Modified acceleration for custom angles
