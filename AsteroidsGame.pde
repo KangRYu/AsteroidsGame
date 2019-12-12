@@ -107,7 +107,10 @@ public void draw() {
           bulletsToRemove.add(bullet);
         }
         if(!asteroidsToRemove.contains(asteroid)) {
-          asteroidsToRemove.add(asteroid);
+          asteroid.addHealth(-20);
+          if(asteroid.getHealth() <= 0) {
+            asteroidsToRemove.add(asteroid);
+          }
         }
       }
     }
@@ -121,7 +124,7 @@ public void draw() {
   }
   // Removes the objects to remove
   for(Asteroid asteroid : asteroidsToRemove) {
-    spawnAsteroidParticles((float)asteroid.getX(), (float)asteroid.getY(), 50, 5, 0, 360, asteroid.getColor());
+    spawnAsteroidParticles((float)asteroid.getX(), (float)asteroid.getY(), 50, 8, 0, 360, asteroid.getColor());
     asteroidList.remove(asteroid);
   }
   for(Bullet bullet : bulletsToRemove) { // Removes each terminated bullet from the bullet list

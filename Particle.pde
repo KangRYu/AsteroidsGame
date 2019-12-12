@@ -19,7 +19,6 @@ class Particle extends Floater{
         // Damps velocity
         myDirectionX *= 0.95;
         myDirectionY *= 0.95;
-        System.out.println(getVelocity());
     }
     public void show() {
         if(customShape) {

@@ -1,4 +1,6 @@
 class Asteroid extends Floater {
+    private float health;
+    private boolean spawning;
     private float rotationSpeed; // In degrees
     private float collisionDistance; // The distance where an object would collide with this asteroid
     public Asteroid() {
@@ -30,24 +32,43 @@ class Asteroid extends Floater {
             }
         }
         // Gives asteroid random position and speed
-        myCenterX = width * Math.random();
-        myCenterY = height * Math.random();
-        myDirectionX = 7 * Math.random() - 3;
-        myDirectionY = 7 * Math.random() - 3;
+        myDirectionX = 4 * Math.random() - 2;
+        myDirectionY = 4 * Math.random() - 2;
+        if(abs((float)myDirectionX) >= abs((float)myDirectionY)) {
+            if(myDirectionX >= 0) {
+                myCenterX = -2 * collisionDistance - 20 * Math.random();
+            }
+            else {
+                myCenterX = width + 2 * collisionDistance + 20 * Math.random();
+            }
+            if(myDirectionY >= 0) {
+                myCenterY = height / 2 * Math.random();
+            }
+            else {
+                myCenterY = height / 2 + height / 2 * Math.random();
+            }
+        }
+        else {
+            if(myDirectionY >= 0) {
+                myCenterY = -2 * collisionDistance - 20 * Math.random();
+            }
+            else {
+                myCenterY = height + 2 * collisionDistance + 20 * Math.random();
+            }
+            if(myDirectionX >= 0) {
+                myCenterX = width / 2 * Math.random();
+            }
+            else {
+                myCenterX = width / 2 + width / 2 * Math.random();
+            }
+        }
         // Gives asteroid random rotation and rotation speed
         myPointDirection = 360 * Math.random();
         rotationSpeed = (float)(10 * Math.random() - 10);
-    }
-    public Asteroid(double argX, double argY) {// Constructor for specifiying position
-        // Set asteroid position
-        myCenterX = argX;
-        myCenterY = argY;
-        // Gives random speed
-        myDirectionX = 10 * Math.random();
-        myDirectionY = 10 * Math.random();
-        // Gives asteroid random rotation and rotation speed
-        myPointDirection = 360 * Math.random();
-        rotationSpeed = (float)(10 * Math.random() - 10);
+        // Initialize health
+        health = 100;
+        // Initialize spawning variable
+        spawning = true;
     }
     public void update() {
         move();
@@ -58,7 +79,16 @@ class Asteroid extends Floater {
     }
     public void move() {
         turn(rotationSpeed);
-        super.move();
+        if(spawning) { // Disable screen wrap when the asteroid is just spawning, as it spawns outside the screen
+            myCenterX += myDirectionX;
+            myCenterY += myDirectionY;
+            if(myCenterX + collisionDistance > 0 && myCenterX - collisionDistance < width && myCenterX >) {
+
+            }
+        }
+        else {
+            super.move();
+        }
     }
     public double getX() {
         return myCenterX;
@@ -71,5 +101,14 @@ class Asteroid extends Floater {
     }
     public int getColor() {
         return myColor;
+    }
+    public float getVelocity() {
+        return sqrt(pow((float)myDirectionX, 2) + pow((float)myDirectionY, 2));
+    }
+    public void addHealth(float input) {
+        health += input;
+    }
+    public float getHealth() {
+        return health;
     }
 }

@@ -7,9 +7,9 @@ class AsteroidParticle extends Particle {
         xCorners = new int[]{-5, 0, 5, 5, 5, 0, -5, -5};
         yCorners = new int[]{-5, -5, -5, 0, 5, 5, 5, 0};
         // Randomizes asteroid shape
-        yCorners[1] += (int)(5 * Math.random());
+        yCorners[1] -= (int)(5 * Math.random());
         xCorners[3] += (int)(5 * Math.random());
-        yCorners[5] -= (int)(5 * Math.random());
+        yCorners[5] += (int)(5 * Math.random());
         xCorners[7] -= (int)(5 * Math.random());
     }
 }
