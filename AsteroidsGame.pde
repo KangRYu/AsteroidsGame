@@ -122,6 +122,18 @@ public void draw() {
       particlesToRemove.add(particle);
     }
   }
+  // Add asteroids off screen to be removed
+  ArrayList<Asteroid> asteroidsOffScreen = new ArrayList<Asteroid>();
+  for(Asteroid asteroid : asteroidList) {
+    if(!asteroid.getSpawnValue()) { // Only run if the asteroid is done spawning, aka fully in the screen
+      if(asteroid.getX() + asteroid.getCollisionDistance() <= 0 || asteroid.getX() - asteroid.getCollisionDistance() >= width) {
+        asteroidsOffScreen.add(asteroid);
+      }
+      else if(asteroid.getY() + asteroid.getCollisionDistance() >= height || asteroid.getY() - asteroid.getCollisionDistance() <= 0) {
+        asteroidsOffScreen.add(asteroid);
+      }
+    }
+  }
   // Removes the objects to remove
   for(Asteroid asteroid : asteroidsToRemove) {
     spawnAsteroidParticles((float)asteroid.getX(), (float)asteroid.getY(), 50, 8, 0, 360, asteroid.getColor());
@@ -133,6 +145,10 @@ public void draw() {
   }
   for(Particle particle : particlesToRemove) {
     particleList.remove(particle);
+  }
+  // Remove off screen asteroids
+  for(Asteroid asteroid : asteroidsOffScreen) {
+    asteroidList.remove(asteroid);
   }
   // Add new asteroids if there is less then the set amount
   if(asteroidList.size() < numOfAsteroids) {

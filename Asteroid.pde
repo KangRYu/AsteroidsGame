@@ -79,15 +79,12 @@ class Asteroid extends Floater {
     }
     public void move() {
         turn(rotationSpeed);
-        if(spawning) { // Disable screen wrap when the asteroid is just spawning, as it spawns outside the screen
-            myCenterX += myDirectionX;
-            myCenterY += myDirectionY;
-            if(myCenterX + collisionDistance > 0 && myCenterX - collisionDistance < width && myCenterX >) {
-
+        myCenterX += myDirectionX;
+        myCenterY += myDirectionY;
+        if(spawning) { // Enable screen wrap if the asteroid is completely on screen
+            if(myCenterX - collisionDistance > 0 && myCenterX + collisionDistance < width && myCenterY + collisionDistance < height && myCenterY - collisionDistance > 0) {
+                spawning = false;  
             }
-        }
-        else {
-            super.move();
         }
     }
     public double getX() {
@@ -110,5 +107,8 @@ class Asteroid extends Floater {
     }
     public float getHealth() {
         return health;
+    }
+    public boolean getSpawnValue() {
+        return spawning;
     }
 }
