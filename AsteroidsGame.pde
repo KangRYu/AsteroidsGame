@@ -11,35 +11,39 @@ int numOfStars = 100;
 int numOfAsteroids = 10;
 
 public void keyPressed() {
-  if(key == 'w' || keyCode == UP) {
-    player.setForward(true);
-  }
-  if(key == 's' || keyCode == DOWN) {
-    player.setBackward(true);
-  }
-  if(key == 'd' || keyCode == RIGHT) {
-    player.setRight(true);
-  }
-  if(key == 'a' || keyCode == LEFT) {
-    player.setLeft(true);
-  }
-  if(key == 'h') {
-    player.hyperSpace();
-    backgroundColor = color(255);
+  if(!player.getDead()) {
+    if(key == 'w' || keyCode == UP) {
+      player.setForward(true);
+    }
+    if(key == 's' || keyCode == DOWN) {
+      player.setBackward(true);
+    }
+    if(key == 'd' || keyCode == RIGHT) {
+      player.setRight(true);
+    }
+    if(key == 'a' || keyCode == LEFT) {
+      player.setLeft(true);
+    }
+    if(key == 'h') {
+      player.hyperSpace();
+      backgroundColor = color(255);
+    }
   }
 }
 public void keyReleased() {
-  if(key == 'w' || keyCode == UP) {
-    player.setForward(false);
-  }
-  if(key == 's' || keyCode == DOWN) {
-    player.setBackward(false);
-  }
-  if(key == 'd' || keyCode == RIGHT) {
-    player.setRight(false);
-  }
-  if(key == 'a' || keyCode == LEFT) {
-    player.setLeft(false);
+  if(!player.getDead()) {
+    if(key == 'w' || keyCode == UP) {
+      player.setForward(false);
+    }
+    if(key == 's' || keyCode == DOWN) {
+      player.setBackward(false);
+    }
+    if(key == 'd' || keyCode == RIGHT) {
+      player.setRight(false);
+    }
+    if(key == 'a' || keyCode == LEFT) {
+      player.setLeft(false);
+    }
   }
 }
 public void mousePressed() {
@@ -90,7 +94,7 @@ public void draw() {
   }
   // Detects collisions etween asteroid and player
   ArrayList<Asteroid> asteroidsToRemove = new ArrayList<Asteroid>();
-  if(!player.getDead()) {
+  if(!player.getDead()) { // Only runs if the player isn't dead
     for(Asteroid asteroid : asteroidList) {
       if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance() + player.getCollisionDistance()) {
         backgroundColor = color(255, 0, 0);
@@ -102,7 +106,7 @@ public void draw() {
     }
   }
   // Detects for collision between bullets and asteroids and removes accordingly
-  ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>(); // A ;ist of all bullets that are going to be removed
+  ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>(); // A list of all bullets that are going to be removed
   for(Bullet bullet : bulletList) {
     for(Asteroid asteroid : asteroidList) {
       if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)bullet.getX(), (float)bullet.getY()) <= asteroid.getCollisionDistance() + bullet.getCollisionDistance()) {
@@ -126,7 +130,7 @@ public void draw() {
     }
   }
   // Add asteroids off screen to be removed
-  ArrayList<Asteroid> asteroidsOffScreen = new ArrayList<Asteroid>();
+  ArrayList<Asteroid> asteroidsOffScreen = new ArrayList<Asteroid>(); // There needs to be a seperate array list for objects to be removed without particles
   for(Asteroid asteroid : asteroidList) {
     if(!asteroid.getSpawnValue()) { // Only run if the asteroid is done spawning, aka fully in the screen
       if(asteroid.getX() + asteroid.getCollisionDistance() <= 0 || asteroid.getX() - asteroid.getCollisionDistance() >= width) {
@@ -135,6 +139,16 @@ public void draw() {
       else if(asteroid.getY() + asteroid.getCollisionDistance() >= height || asteroid.getY() - asteroid.getCollisionDistance() <= 0) {
         asteroidsOffScreen.add(asteroid);
       }
+    }
+  }
+  // Add bullets off screen to be removed
+  ArrayList<Bullet> bulletsOffScreen = new ArrayList<Bullet>();
+  for(Bullet bullet : bulletList) {
+    if(bullet.getX() + bullet.getCollisionDistance() <= 0 || bullet.getX() - bullet.getCollisionDistance() >= width) {
+      bulletsOffScreen.add(bullet);
+    }
+    else if(bullet.getY() + bullet.getCollisionDistance() >= height || bullet.getY() - bullet.getCollisionDistance() <= 0) {
+      bulletsOffScreen.add(bullet);
     }
   }
   // Removes the objects to remove
@@ -152,6 +166,10 @@ public void draw() {
   // Remove off screen asteroids
   for(Asteroid asteroid : asteroidsOffScreen) {
     asteroidList.remove(asteroid);
+  }
+  // Remove off screen bullets
+  for(Bullet bullet : bulletsOffScreen) {
+    bulletList.remove(bullet);
   }
   // Add new asteroids if there is less then the set amount
   if(asteroidList.size() < numOfAsteroids) {

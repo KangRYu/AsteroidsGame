@@ -15,6 +15,10 @@ class Bullet extends Floater {
     move();
     show();
   }
+  public void move() {
+    myCenterX += myDirectionX;
+    myCenterY += myDirectionY;
+  }
   public void show() {             
     fill(myColor);  
     stroke(myColor);    
