@@ -88,13 +88,16 @@ public void draw() {
   for(Asteroid asteroid : asteroidList) {
     asteroid.update();
   }
-  // Detects collisions
+  // Detects collisions etween asteroid and player
   ArrayList<Asteroid> asteroidsToRemove = new ArrayList<Asteroid>();
-  for(Asteroid asteroid : asteroidList) {
-    if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance() + player.getCollisionDistance()) {
-      backgroundColor = color(255, 0, 0);
-      if(!asteroidsToRemove.contains(asteroid)) {
-        asteroidsToRemove.add(asteroid);
+  if(!player.getDead()) {
+    for(Asteroid asteroid : asteroidList) {
+      if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance() + player.getCollisionDistance()) {
+        backgroundColor = color(255, 0, 0);
+        player.addHealth(-10);
+        if(!asteroidsToRemove.contains(asteroid)) {
+          asteroidsToRemove.add(asteroid);
+        }
       }
     }
   }
@@ -155,6 +158,11 @@ public void draw() {
     for(int i = 0; i < numOfAsteroids - asteroidList.size(); i++) {
       asteroidList.add(new Asteroid());
     }
+  }
+  // Remove player if health is 0
+  if(player.getHealth() <= 0 && !player.getDead()) {
+    spawnParticles((float)player.getX(), (float)player.getY(), 500, 100, 0, 360, color(255));
+    player.setDead(true);
   }
 }
 public void fadeInBackground() { // Fades in the background

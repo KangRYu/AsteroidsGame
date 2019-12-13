@@ -1,5 +1,6 @@
 class Asteroid extends Floater {
     private float health;
+    private float maxHealth;
     private boolean spawning;
     private float rotationSpeed; // In degrees
     private float collisionDistance; // The distance where an object would collide with this asteroid
@@ -66,7 +67,8 @@ class Asteroid extends Floater {
         myPointDirection = 360 * Math.random();
         rotationSpeed = (float)(10 * Math.random() - 10);
         // Initialize health
-        health = 100;
+        maxHealth = 69;
+        health = maxHealth;
         // Initialize spawning variable
         spawning = true;
     }
@@ -86,6 +88,17 @@ class Asteroid extends Floater {
                 spawning = false;  
             }
         }
+    }
+    public void show() {
+        if(health < maxHealth) {
+            noStroke();
+            rectMode(CORNER);
+            fill(100, 100, 100);
+            rect((float)myCenterX - 30, (float)myCenterY - 50, 60, 10);
+            fill(255, 0, 0);
+            rect((float)myCenterX - 30, (float)myCenterY - 50, 60 * (health / maxHealth), 10);
+        }
+        super.show();
     }
     public double getX() {
         return myCenterX;

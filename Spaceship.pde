@@ -1,6 +1,9 @@
 class Spaceship extends Floater {
     private boolean forward, backward, left, right; // The direction of acceleration
     private boolean shooting;
+    private float maxHealth;
+    private float health;
+    private boolean dead = false;
     private int shootingCooldownAmount; // The current shooting cool down
     private int shootingCooldown; // What the cool down amount will be equal to when the ship fires
     private float collisionDistance; // The distance until the spaceship collides with another object
@@ -39,6 +42,9 @@ class Spaceship extends Floater {
         // Set shooting cool down
         shootingCooldown = 10;
         shootingCooldownAmount = 0;
+        // Set health
+        maxHealth = 100;
+        health = maxHealth;
     }
     public void accelerate(float amount, float angle) { // Modified acceleration for custom angles
         float rads = radians(angle);
@@ -53,9 +59,11 @@ class Spaceship extends Floater {
         }
     }
     public void update() { // Calls all the necesary functions for an update
-        move();
-        shoot();
-        show();
+        if(!dead) {
+            move();
+            shoot();
+            show();
+        }
     }
     public void move() {
         // Turn player to mouse angle
@@ -179,5 +187,17 @@ class Spaceship extends Floater {
     }
     public void setShooting(boolean argBool) {
         shooting = argBool;
+    }
+    public void addHealth(float value) {
+        health += value;
+    }
+    public float getHealth() {
+        return health;
+    }
+    public void setDead(boolean value) {
+        dead = value;
+    }
+    public boolean getDead() {
+        return dead;
     }
 }
