@@ -14,7 +14,7 @@ int hyperspacesLeft; // The number of hyperspaces left
 float scoreScale; // The scale of the score text, for lerping
 // Properties
 int numOfStars = 100;
-int numOfAsteroids = 20;
+int numOfAsteroids = 18;
 
 public void keyPressed() {
   if(!player.getDead()) {
@@ -64,7 +64,7 @@ public void mouseReleased() {
 }
 public void setup() {
   // Style settings
-  size(800, 800);
+  size(700, 700);
   // Initializes values
   player = new Spaceship();
   originalBackgroundColor = color(30);
@@ -140,7 +140,7 @@ public void draw() {
     fill(255);
     textSize(30);
     textAlign(CENTER, CENTER);
-    text("Highscore: " + highscore, width/2, 300);
+    text("Highscore: " + highscore, width/2, 260);
     // Button
     restartButton.update();
     if(restartButton.pressed()) {
@@ -172,7 +172,7 @@ public void draw() {
         if(!asteroidsToRemove.contains(asteroid)) {
           asteroid.addHealth(-20);
           if(asteroid.getHealth() <= 0) {
-            spawnFloaterText((float)asteroid.getX(), (float)asteroid.getY(), -5, radians(90.0), color(255), "+" + Integer.toString((combo * 10)));
+            spawnFloaterText((float)asteroid.getX(), (float)asteroid.getY(), -5, radians(90.0), color(255), "+" + str(combo * 10));
             addScore();
             asteroidsToRemove.add(asteroid);
           }
