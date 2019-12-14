@@ -14,7 +14,7 @@ int hyperspacesLeft; // The number of hyperspaces left
 float scoreScale; // The scale of the score text, for lerping
 // Properties
 int numOfStars = 100;
-int numOfAsteroids = 18;
+int numOfAsteroids = 16;
 
 public void keyPressed() {
   if(!player.getDead()) {
