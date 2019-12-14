@@ -143,7 +143,7 @@ public void draw() {
     text("Highscore: " + highscore, width/2, 260);
     // Button
     restartButton.update();
-    if(restartButton.pressed()) {
+    if(restartButton.isPressed()) {
       reset();
     }
   }

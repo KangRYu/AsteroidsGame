@@ -50,7 +50,7 @@ class Button {
         text(txt, x, y);
         rectMode(CORNER); // Undo rect mode
     }
-    public boolean pressed() {
+    public boolean isPressed() {
         return pressed;
     }
 }
