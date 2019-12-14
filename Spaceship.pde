@@ -3,6 +3,7 @@ class Spaceship extends Floater {
     private boolean shooting;
     private float maxHealth;
     private float health;
+    private float healthBarScale; // The scale of the health bar, for lerping
     private boolean dead = false;
     private int shootingCooldownAmount; // The current shooting cool down
     private int shootingCooldown; // What the cool down amount will be equal to when the ship fires
@@ -45,6 +46,7 @@ class Spaceship extends Floater {
         // Set health
         maxHealth = 100;
         health = maxHealth;
+        healthBarScale = 1;
     }
     public void accelerate(float amount, float angle) { // Modified acceleration for custom angles
         float rads = radians(angle);
@@ -64,6 +66,16 @@ class Spaceship extends Floater {
             shoot();
             show();
         }
+    }
+    public void show() {
+        super.show();
+        // Draw health bar for player
+        healthBarScale = lerp(healthBarScale, 1, 0.05); // Interpolate health bar scale
+        noStroke();
+        fill(100, 100, 100, 160);
+        rect(25, 25, 300 * healthBarScale, 50 * healthBarScale);
+        fill(255, 75, 75, 160);
+        rect(25, 25, 300 * health/maxHealth * healthBarScale, 50 * healthBarScale);
     }
     public void move() {
         // Turn player to mouse angle
@@ -131,6 +143,9 @@ class Spaceship extends Floater {
     public double getY() {
         return myCenterY;
     }
+    public int getColor() {
+        return myColor;
+    }
     public double getPointDirection() {
         return myPointDirection;
     }
@@ -190,9 +205,13 @@ class Spaceship extends Floater {
     }
     public void addHealth(float value) {
         health += value;
+        healthBarScale = 1.25;
     }
     public float getHealth() {
         return health;
+    }
+    public float getMaxHealth() {
+        return maxHealth;
     }
     public void setDead(boolean value) {
         dead = value;

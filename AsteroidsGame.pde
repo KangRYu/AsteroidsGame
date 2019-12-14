@@ -4,11 +4,17 @@ ArrayList<Star> starList = new ArrayList<Star>();
 ArrayList<Asteroid> asteroidList = new ArrayList<Asteroid>();
 ArrayList<Bullet> bulletList = new ArrayList<Bullet>();
 ArrayList<Particle> particleList = new ArrayList<Particle>();
+Button restartButton;
 int originalBackgroundColor; // The original background color so that when hyperspacing the background can return to its original color
 int backgroundColor; // The current background color
+int score;
+int highscore;
+int combo; // Increases per asteroid destroyed without getting hit
+int hyperspacesLeft; // The number of hyperspaces left
+float scoreScale; // The scale of the score text, for lerping
 // Properties
 int numOfStars = 100;
-int numOfAsteroids = 10;
+int numOfAsteroids = 20;
 
 public void keyPressed() {
   if(!player.getDead()) {
@@ -25,8 +31,12 @@ public void keyPressed() {
       player.setLeft(true);
     }
     if(key == 'h') {
-      player.hyperSpace();
-      backgroundColor = color(255);
+      if(hyperspacesLeft > 0) {
+        player.hyperSpace();
+        hyperspacesLeft--;
+        backgroundColor = color(255);
+        asteroidList.clear(); // Clear all asteroids when hyperspacing
+      }
     }
   }
 }
@@ -54,12 +64,18 @@ public void mouseReleased() {
 }
 public void setup() {
   // Style settings
-  size(500, 500);
-  rectMode(CENTER);
+  size(800, 800);
   // Initializes values
   player = new Spaceship();
   originalBackgroundColor = color(30);
   backgroundColor = originalBackgroundColor;
+  score = 0;
+  highscore = 0;
+  scoreScale = 1;
+  combo = 1;
+  hyperspacesLeft = 3;
+  // Setup restart button
+  restartButton = new Button(width/2, height/2, 250, 100, "Restart");
   // Instances stars
   for(int i = 0; i < numOfStars; i++) {
     starList.add(new Star());
@@ -78,19 +94,58 @@ public void draw() {
   for(Star stars : starList) {
     stars.show();
   }
-  // Draws all particles
-  for(Particle particles : particleList) {
-    particles.update();
-  }
   // Draws all bullets
   for(Bullet bullets : bulletList) {
     bullets.update();
   }
-  // Updates player
-  player.update();
   // Draws all asteroids
   for(Asteroid asteroid : asteroidList) {
     asteroid.update();
+  }
+  // Updates player
+  player.update();
+  // Draws all particles
+  for(Particle particles : particleList) {
+    particles.update();
+  }
+  // Draw score
+  scoreScale = lerp(scoreScale, 1, 0.05); // Interpolate scale
+  fill(255);
+  textSize(30 * scoreScale);
+  textAlign(RIGHT, CENTER);
+  text("Score: " + score, width - 25, 37.5);
+  // Draw combo counter
+  fill(255);
+  textSize(15);
+  textAlign(RIGHT, CENTER);
+  text("Combo: x" + combo, width - 30, 70);
+  // Draw highscore
+  fill(255);
+  textSize(15);
+  textAlign(RIGHT, CENTER);
+  text("Highscore: " + highscore, width - 30, 92.5);
+  // Draw hyperspace counter
+  fill(255);
+  textSize(15);
+  textAlign(RIGHT, CENTER);
+  text("Hyperspaces: " + hyperspacesLeft, width - 30, 115);
+  // Draws game over screen if lost
+  if(player.getDead()) {
+    // Score
+    fill(255);
+    textSize(50);
+    textAlign(CENTER, CENTER);
+    text("Score: " + score, width/2, 200);
+    // Highscore
+    fill(255);
+    textSize(30);
+    textAlign(CENTER, CENTER);
+    text("Highscore: " + highscore, width/2, 300);
+    // Button
+    restartButton.update();
+    if(restartButton.pressed()) {
+      reset();
+    }
   }
   // Detects collisions etween asteroid and player
   ArrayList<Asteroid> asteroidsToRemove = new ArrayList<Asteroid>();
@@ -99,6 +154,7 @@ public void draw() {
       if(dist((float)asteroid.getX(), (float)asteroid.getY(), (float)player.getX(), (float)player.getY()) <= asteroid.getCollisionDistance() + player.getCollisionDistance()) {
         backgroundColor = color(255, 0, 0);
         player.addHealth(-10);
+        combo = 1;
         if(!asteroidsToRemove.contains(asteroid)) {
           asteroidsToRemove.add(asteroid);
         }
@@ -116,6 +172,8 @@ public void draw() {
         if(!asteroidsToRemove.contains(asteroid)) {
           asteroid.addHealth(-20);
           if(asteroid.getHealth() <= 0) {
+            spawnFloaterText((float)asteroid.getX(), (float)asteroid.getY(), -5, radians(90.0), color(255), "+" + Integer.toString((combo * 10)));
+            addScore();
             asteroidsToRemove.add(asteroid);
           }
         }
@@ -136,7 +194,7 @@ public void draw() {
       if(asteroid.getX() + asteroid.getCollisionDistance() <= 0 || asteroid.getX() - asteroid.getCollisionDistance() >= width) {
         asteroidsOffScreen.add(asteroid);
       }
-      else if(asteroid.getY() + asteroid.getCollisionDistance() >= height || asteroid.getY() - asteroid.getCollisionDistance() <= 0) {
+      else if(asteroid.getY() - asteroid.getCollisionDistance() >= height || asteroid.getY() + asteroid.getCollisionDistance() <= 0) {
         asteroidsOffScreen.add(asteroid);
       }
     }
@@ -147,7 +205,7 @@ public void draw() {
     if(bullet.getX() + bullet.getCollisionDistance() <= 0 || bullet.getX() - bullet.getCollisionDistance() >= width) {
       bulletsOffScreen.add(bullet);
     }
-    else if(bullet.getY() + bullet.getCollisionDistance() >= height || bullet.getY() - bullet.getCollisionDistance() <= 0) {
+    else if(bullet.getY() - bullet.getCollisionDistance() >= height || bullet.getY() + bullet.getCollisionDistance() <= 0) {
       bulletsOffScreen.add(bullet);
     }
   }
@@ -177,11 +235,19 @@ public void draw() {
       asteroidList.add(new Asteroid());
     }
   }
-  // Remove player if health is 0
+  // Set player to dead if health is 0 or lower
   if(player.getHealth() <= 0 && !player.getDead()) {
-    spawnParticles((float)player.getX(), (float)player.getY(), 500, 100, 0, 360, color(255));
+    spawnParticles((float)player.getX(), (float)player.getY(), 500, 100, 0, 360, player.getColor());
     player.setDead(true);
+    if(score > highscore) {
+      highscore = score;
+    }
   }
+}
+public void addScore() {
+  score += 10 * combo;
+  combo++;
+  scoreScale = 1.5;
 }
 public void fadeInBackground() { // Fades in the background
   int firstColor = backgroundColor;
@@ -205,4 +271,19 @@ public void spawnAsteroidParticles(float posX, float posY, int numOfParticles, f
     Particle obj = new AsteroidParticle(posX, posY, velocity, velocityAngle, particleColor);
     particleList.add(obj);
   }
+}
+public void spawnFloaterText(float posX, float posY, float speed, float angle, int particleColor, String argTxt) {
+  Particle obj = new TextFloater(posX, posY, speed, angle, particleColor, argTxt);
+  particleList.add(obj);
+}
+public void reset() { // Resets the game and all its values
+  score = 0;
+  player = new Spaceship();
+  combo = 1;
+  asteroidList.clear();
+  bulletList.clear();
+  particleList.clear();
+  backgroundColor = originalBackgroundColor;
+  scoreScale = 1;
+  hyperspacesLeft = 3;
 }

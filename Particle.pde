@@ -1,7 +1,7 @@
 class Particle extends Floater{
     protected float size;
     protected boolean customShape;
-    public Particle(float argX, float argY, float argVelocity, float argVelocityAngle, int argColor) { // Optional constructor
+    public Particle(float argX, float argY, float argVelocity, float argVelocityAngle, int argColor) {
         size = (float)(10 * Math.random());
         myCenterX = argX;
         myCenterY = argY;

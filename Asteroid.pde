@@ -67,7 +67,7 @@ class Asteroid extends Floater {
         myPointDirection = 360 * Math.random();
         rotationSpeed = (float)(10 * Math.random() - 10);
         // Initialize health
-        maxHealth = 69;
+        maxHealth = 100;
         health = maxHealth;
         // Initialize spawning variable
         spawning = true;
@@ -92,10 +92,9 @@ class Asteroid extends Floater {
     public void show() {
         if(health < maxHealth) {
             noStroke();
-            rectMode(CORNER);
-            fill(100, 100, 100);
+            fill(100);
             rect((float)myCenterX - 30, (float)myCenterY - 50, 60, 10);
-            fill(255, 0, 0);
+            fill(255, 75, 75);
             rect((float)myCenterX - 30, (float)myCenterY - 50, 60 * (health / maxHealth), 10);
         }
         super.show();
